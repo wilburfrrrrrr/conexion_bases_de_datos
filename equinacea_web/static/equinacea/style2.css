@@ -1,0 +1,56 @@
+/* Add this to your custom CSS file */
+
+/* Style the navigation bar */
+
+
+/* Style the login form */
+form {
+    max-width: 400px; /* Adjust the maximum width of the form to your liking */
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc; /* Add a border to the form for a card-like effect */
+    background-color: #f9f9f9; /* Replace with your desired form background color */
+}
+
+h1 {
+    text-align: center;
+}
+
+/* Style the error message */
+.error {
+    color: #ff3333; /* Replace with your desired error message color */
+    text-align: center;
+}
+
+/* Style the "Inicia" button within the form */
+form .btn-primary {
+    background-color: #38BEC7; /* Replace with your desired button background color */
+    border-color: #38BEC7; /* Replace with your desired button border color */
+    color: #fff; /* Replace with your desired button text color */
+}
+
+form .btn-primary:hover {
+    background-color: #fff; /* Replace with your desired button hover background color */
+    border-color: #fff; /* Replace with your desired button hover border color */
+    color: #00aa63; /* Replace with your desired button hover text color */
+}
+
+#historial{
+    max-width: 600px; /* Adjust the maximum width as needed */
+    margin: 0 auto; /* Center the form horizontally on the page */
+    padding: 20px;
+    background-color: #f0f0f0; /* Form background color */
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 5px; /* Add rounded corners */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+
+}
+
+#historial input[type="text"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px; /* Add some bottom margin */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}

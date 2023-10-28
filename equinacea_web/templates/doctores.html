@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Kulim+Park:wght@300&family=Montserrat:wght@300&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'equinacea/style1.css' %}">
+	<title>Equinácea</title>
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand-lg bg-body-tertiary">
+			<h1>Equinácea Web</h1>
+			<a class="btn btn-primary" href="{% url 'inicio' %}"> Regresar </a>
+		</nav>		
+	</header>
+
+	<div id="info_usuario" class="container-sm">
+		<p>Ahora eres: {{doctor.ID_usuario}} </p>
+		<p>Usuario: {{ doctor.nombre }} {{doctor.apellido}}</p>
+		<p>Doctor</p>
+	</div>
+	<div class="container-lg">	
+		<div id="citas_pendientes">
+			<h2>Citas Pendientes</h2>
+			<table class="table table-striped">
+				<thead>
+					<th>Número de Cita</th>
+					<th>ID Paciente</th>
+					<th>Nombre</th>
+					<th>Apellido</th>
+					<th>Tipo</th>
+					<th>Fecha</th>
+					<th>Accion</th>
+				</thead>
+				<tbody>
+					{% for cita in citas %}
+					<tr>
+						<td>{{ cita.ID_cita }}</td>
+						<td>{{ cita.paciente }}</td>
+						<td>{{ cita.paciente__ID_paciente__nombre }}</td>
+						<td>{{ cita.paciente__ID_paciente__apellido }}</td>
+						<td>{{ cita.tipo__tipo }}</td>
+						<td>{{ cita.fecha }}</td>
+						<td>
+							<a class="btn btn-primary" href="{% url 'cita' cita.ID_cita %}">Iniciar</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<footer>
+	</footer>
+</body>
+</html>	

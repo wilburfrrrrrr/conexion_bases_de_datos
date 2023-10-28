@@ -1,0 +1,37 @@
+/* Add this to your custom CSS file */
+
+/* Style the navigation bar */
+
+/* Style the table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+table th {
+    background-color: #333; /* Replace with your desired table header background color */
+    color: #fff; /* Replace with your desired table header text color */
+}
+
+table tr:nth-child(odd) {
+    background-color: #f9f9f9; /* Replace with your desired odd row background color */
+}
+
+table tr:nth-child(even) {
+    background-color: #fff; /* Replace with your desired even row background color */
+}
+
+/* Style the footer */
+footer {
+    text-align: center;
+    background-color: #333; /* Replace with your desired footer background color */
+    color: #fff; /* Replace with your desired footer text color */
+    padding: 10px 0;
+}

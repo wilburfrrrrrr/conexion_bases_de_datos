@@ -1,0 +1,83 @@
+/* Add this to your custom CSS file */
+
+/* Change the background color of the navigation bar */
+body{
+    background-color: #CFFFC7;
+    font-family: 'Kulim Park', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24;
+  color: #fff !important;
+}
+
+.icono_login:hover {
+    color: #028351 !important;
+  }
+
+.icono_registro:hover {
+    color: #028351 !important;
+}
+/* .material-symbols-outlined:hover{} */
+
+.navbar {
+    background-color: #38BEC7 !important; /* Replace with your desired color */
+}
+
+/* Change the text color of the navigation bar links */
+.navbar a {
+    color: #028351; /* Replace with your desired color */
+}
+
+/* Style the "Iniciar Sesión" and "Registrarse" buttons */
+.btn-primary {
+    background-color: #ffffff; /* Replace with your desired button background color */
+    border-color: #fff; /* Replace with your desired button border color */
+    color: #028351; /* Replace with your desired button text color */
+}
+
+.btn-primary{
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn-primary:hover {
+    background-color: #00aa63; /* Replace with your desired button hover background color */
+    border-color: #00aa63; /* Replace with your desired button hover border color */
+    color: #fff; /* Replace with your desired button hover text color */
+}
+
+
+/* Style the header */
+header {
+    text-align: center;
+    background-color: #38BEC7; /* Replace with your desired header background color */
+    padding: 20px;
+    color: #fff; /* Replace with your desired header text color */
+}
+
+#info_usuario {
+    width: 20%; /* Adjust the width as needed */
+    background-color: #f0f0f0; /* Sidebar background color */
+    padding: 20px; /* Add some padding for content */
+    box-shadow: 1px 0px 3px rgba(0, 0, 0, 0.2); /* Add a shadow on the right side */
+}
+
+.container-lg h2 {
+    margin-top: 30px; /* Add some top margin to headings */
+}
+
+.container-sm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Add some space between buttons */
+  }
