@@ -1,16 +1,6 @@
-from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from .models import Usuarios, Administradores, Pacientes, Doctores, Cajeros
 
-
-# def usuario_required(function):
-# 	def wrap(request, *args, **kwargs):
-# 		try:
-# 			usuario = Usuarios.objects.get(mail=request.session['mail'])
-# 			return function(request, *args, **kwargs)
-# 		except:
-# 			return HttpResponseForbidden("Prohibido: No has iniciado sesion")
-# 	return wrap
 
 def admin_required(function):
 	def wrap(request, *args, **kwargs):

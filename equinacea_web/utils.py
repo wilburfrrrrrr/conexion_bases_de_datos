@@ -10,6 +10,3 @@ def verifica_password(password, hashed_password):
 def iniciar_sesion(request, usuario):
 	request.session['user_id'] = usuario.ID_usuario
 	print("Sesion iniciada con el usuario: " + str(usuario.ID_usuario))
-
-def unhash_password(hashed_password):
-	return hashed_password.decode('utf-8')

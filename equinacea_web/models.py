@@ -1,26 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import AbstractUser, AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
-from django.contrib.auth.hashers import check_password
 
-# class CustomUserManager(BaseUserManager):
-# 	def create_user(self, mail, password = None, **extra_fields):
-# 		if not mail:
-# 			raise ValueError('El usuario debe tener un mail')
-# 		mail_normalizado = self.normalize_email(mail)
-# 		user = self.model(mail=mail_normalizado, **extra_fields)
-# 		user.set_password(password)
-# 		user.save(using = self._db)
-# 		return user
-	
-# 	def create_superuser(self, mail, password = None, **extra_fields):
-# 		extra_fields.setdefault('is_staff', True)
-# 		extra_fields.setdefault('is_superuser', True)
-# 		if extra_fields.get('is_staff') is not True:
-# 			raise ValueError('El superusuario debe tener is_staff = True')
-# 		if extra_fields.get('is_superuser') is not True:
-# 			raise ValueError('El superusuario debe tener is_superuser = True')
-# 		return self.create_user(mail, password, **extra_fields)
 
 class Usuarios(models.Model):
 	ID_usuario = models.IntegerField(primary_key=True, unique=True, db_column = 'ID_usuario')
@@ -34,37 +14,6 @@ class Usuarios(models.Model):
 		db_table = 'usuarios'
 	def __str__(self):
 		return self.nombre + ' ' + self.apellido
-
-
-# class CustomUser(AbstractBaseUser, PermissionsMixin):
-# 	ID_usuario = models.IntegerField(primary_key=True, unique=True, db_column = 'ID_usuario')
-# 	nombre = models.CharField(max_length=45, db_column = 'nombre')
-# 	apellido = models.CharField(max_length=45, db_column = 'apellido')
-# 	mail = models.CharField(max_length=45, unique=True, db_column = 'mail')
-# 	telefono = models.CharField(max_length=45, db_column = 'telefono')
-# 	password = models.CharField(max_length=45, db_column = 'password')
-
-# 	objects = CustomUserManager()
-# 	USERNAME_FIELD = 'mail'
-
-# 	is_staff = models.BooleanField(default=False)
-# 	is_active = models.BooleanField(default=True)
-
-# 	groups = models.ManyToManyField(Group, related_name='custom_users')
-# 	user_permissions = models.ManyToManyField(Permission, related_name='custom_users')
-
-# # 	# class Meta:
-# 	# 	db_table = 'usuarios'
-		
-# 	def check_password(self, raw_password):
-# 		return check_password(raw_password, self.password)
-	
-# 	def __str__(self):
-# 		return self.nombre + ' ' + self.apellido
-
-
-	
-
 
 class Turnos(models.Model):
 	ID_turno = models.AutoField(primary_key=True, db_column = 'ID_turno')

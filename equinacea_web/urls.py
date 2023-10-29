@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from equinacea_web import views
 
 urlpatterns = [
@@ -49,11 +49,4 @@ urlpatterns = [
 	path('admin/admin_p/<int:id_paciente>/eliminar', views.archivar_paciente, name='archivar_paciente'),
 	path('doctores/<int:id_cita>/eliminar', views.archivar_cita, name='archivar_cita'),
 	path('cajeros/<int:id_turno>/eliminar', views.archivar_turno, name='archivar_turno'),
-	
-
-	# eliminar usuario: paciente, doctor, cajero, administrador
-	# eliminar citas
-	# eliminar turnos
-	# actualizar usuario: paciente, doctor, cajero, administrador
-	
 ]	

@@ -1,9 +1,8 @@
 from django.shortcuts import  render, redirect
 from django.utils import timezone
-from datetime import datetime, timedelta, date
+from datetime import timedelta 
 from equinacea_web import models, forms, decorators, auth, utils
-from django.db.models import F, ExpressionWrapper, DateTimeField
-from django.http import HttpResponse
+
 
 
 def paneles(request, usuario):
@@ -29,7 +28,6 @@ def login_usuario(request):
 				password = form.cleaned_data['password']
 				usuario = auth.autenticar(request, mail=email, password=password)
 				if usuario is not None:
-					# login(request, usuario)
 					utils.iniciar_sesion(request, usuario)
 					print(f"{request.session.get('user_id')}")
 					return paneles(request, usuario)
@@ -49,8 +47,6 @@ def logout_usuario(request):
 def cajeros(request):
 	id_sesion = request.session.get('user_id')
 	cajero = models.Usuarios.objects.get(ID_usuario = id_sesion)
-	# cajero_id = 1252686
-	# cajero = models.Usuarios.objects.get(ID_usuario = cajero_id)
 	turnos = models.Turnos.objects.values(
 		'ID_turno',
 		'paciente',
@@ -74,7 +70,6 @@ def doctores(request):
 	user_id = request.session.get('user_id')
 	doctor_actual = models.Usuarios.objects.get(ID_usuario = user_id)
 	doctor_id = doctor_actual.ID_usuario
-	# doctor_id = 8093211	
 	doctor = models.Usuarios.objects.get(ID_usuario = doctor_id)
 
 	citas = models.Citas.objects.filter(doctor = doctor_id).values(
@@ -95,10 +90,8 @@ def doctores(request):
 @decorators.paciente_required
 def pacientes(request):
 	user_id = request.session.get('user_id')
-	# fecha_actual = timezone.now()
 	paciente = models.Usuarios.objects.get(ID_usuario = user_id)
 	paciente_id = paciente.ID_usuario
-	# paciente_id = 123516
 	paciente = models.Usuarios.objects.get(ID_usuario = paciente_id)
 	
 	historial = models.Historial.objects.filter(paciente = paciente.ID_usuario).values(
@@ -172,7 +165,6 @@ def admin(request):
 	user_id = request.session.get('user_id')
 	admin = models.Usuarios.objects.get(ID_usuario = user_id)
 	admin_id = admin.ID_usuario
-	# admin_id = 9683825
 	admin = models.Usuarios.objects.get(ID_usuario = admin_id)
 	return render (request, 'admin.html', {'admin': admin})
 
@@ -337,7 +329,6 @@ def registro_citas(request, id_turno):
 @decorators.paciente_required
 def registro_turnos(request):
 	paciente_id = request.session.get('user_id')
-	# paciente_id = 123516
 	if request.method == 'POST':
 		register_form = forms.registro_turnos(request.POST)
 		if register_form.is_valid():

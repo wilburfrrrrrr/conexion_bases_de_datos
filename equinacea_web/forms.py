@@ -1,18 +1,11 @@
-from typing import Any
 from django import forms
 from equinacea_web import models
-from datetime import datetime
 from django.utils import timezone
-from django.contrib.auth.forms import AuthenticationForm
 from django.core.validators import validate_email
-# forms.ModelForm
 
 class login_form(forms.Form):
 	mail = forms.CharField(label='Correo', max_length=45, widget=forms.TextInput(attrs={'class': 'form-control'}), validators = [validate_email])
 	password = forms.CharField(label='Contraseña', max_length=45, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-	# class Meta:
-	# 	model = models.Usuarios
-	# 	fields = ['mail', 'password']
 
 class registro_usuarios(forms.ModelForm):
 	ID_usuario = forms.IntegerField(label='ID', widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -93,8 +86,5 @@ class actualizar_historial(forms.ModelForm):
 		fields = ['situacion', 'observaciones']
 
 
-
-# from django import forms
-# from .models import YourModel  # Import your model
 
 
