@@ -71,9 +71,8 @@ def cajeros(request):
 def doctores(request):
 	# user_id = request.session.get('user_id')
 	# doctor_actual = models.Usuarios.objects.get(ID_usuario = user_id)
-	fecha_actual = timezone.now()
 	# doctor_id = doctor_actual.ID_usuario
-	doctor_id = 7745241
+	doctor_id = 8093211	
 	doctor = models.Usuarios.objects.get(ID_usuario = doctor_id)
 
 	citas = models.Citas.objects.filter(doctor = doctor_id).values(
@@ -84,24 +83,10 @@ def doctores(request):
 		'tipo__tipo',
 		'fecha'
 	)
-	cita_actual = models.Citas.objects.filter(
-		fecha__day = fecha_actual.day,
-		doctor = doctor_id
-		).values(
-		'ID_cita',
-		'paciente',
-		'paciente__ID_paciente__nombre',
-		'paciente__ID_paciente__apellido',
-		'tipo__tipo',
-		'fecha'
-	)
-	cita_proxima = citas[0]
 
 	contexto = {
 		'doctor': doctor,
 		'citas': citas,
-		'cita_actual': cita_actual,
-		'cita_proxima': cita_proxima
 	}
 	return render(request, 'doctores.html', contexto)
 
@@ -128,23 +113,11 @@ def pacientes(request):
 		'tipo__tipo',
 		'fecha'
 	)
-	cita_actual = models.Citas.objects.filter(
-		fecha__day = fecha_actual.day, 
-		paciente = paciente_id
-		).values(
-		'ID_cita',
-		'doctor',
-		'doctor__ID_doctor__nombre',
-		'doctor__ID_doctor__apellido',
-		'tipo__tipo',
-		'fecha'
-	)
 
 	contexto = {
 		'paciente': paciente,
 		'historial': historial,
 		'citas': citas,
-		'cita_actual': cita_actual,
 	}
 	return render(request, 'pacientes.html', contexto)
 
@@ -316,7 +289,7 @@ def registro_citas(request, id_turno):
 	turno = models.Turnos.objects.get(ID_turno = id_turno)
 	paciente = models.Pacientes.objects.get(ID_paciente = turno.paciente)
 	if request.method == 'POST':
-		register_form = forms.registro_citas(request.POST)
+		register_form = forms.registro_citas(data = request.POST, especialidad = turno.especialidad)
 		print(f"post")
 		if register_form.is_valid():
 			print(f"valido")
@@ -333,7 +306,7 @@ def registro_citas(request, id_turno):
 			print(f"turno actualizado")
 			return redirect('cajeros')
 	else:
-		register_form = forms.registro_citas()
+		register_form = forms.registro_citas(especialidad = turno.especialidad)
 	return render(request, 'registro_citas.html', {'register_form': register_form})
 
 # @decorators.paciente_required

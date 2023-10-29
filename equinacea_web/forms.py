@@ -60,9 +60,9 @@ class registro_doctores(registro_usuarios):
 
 	
 class registro_citas(forms.ModelForm):
-	# def __init__(self, especialidad, *args, **kwargs):
-		# super(registro_citas, self).__init__(*args, **kwargs)
-		# self.fields['doctor'].queryset = models.Doctores.objects.filter(especialidad=especialidad, disponibilidad=True)
+	def __init__(self, especialidad, *args, **kwargs):
+		super(registro_citas, self).__init__(*args, **kwargs)
+		self.fields['doctor'].queryset = models.Doctores.objects.filter(especialidad=especialidad, disponibilidad=True)
 
 	doctor = forms.ModelChoiceField(queryset=models.Doctores.objects.all(), empty_label="Seleccione un doctor")
 	fecha = forms.DateField(label='Fecha', widget=forms.SelectDateWidget())

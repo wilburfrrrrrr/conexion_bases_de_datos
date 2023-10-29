@@ -18,7 +18,15 @@
 <body>
 	<header>
 		<nav class="navbar navbar-expand-lg bg-body-tertiary">
-			<h1>Equinácea Web</h1>
+			<div id="logo">
+				<span class="material-symbols-outlined">
+					psychiatry
+				</span>
+				<h1>Equinácea Web</h1>
+			</div>
+			<a href="{% url 'logout_usuario' %}"> <span class="material-symbols-outlined">
+				move_item
+				</span> </a>
 		</nav>		
 	</header>
 	
@@ -31,9 +39,6 @@
 	<div id="contenedor">
 		<div id="regreso" class="container-sm">
 			<a class="btn btn-primary" href="{% url 'doctores' %}">Regresar</a>
-			<a class="btn btn-primary" href="{% url 'logout_usuario' %}"> <span class="material-symbols-outlined">
-				move_item
-				</span> </a>
 		</div>
 		<div id="info_paciente">
 			<table class="table table-striped">
@@ -81,7 +86,9 @@
                     <button type="submit" class="btn btn-primary">Register</button>
             </form>
 	</div>
-	<footer>
+	<div id="descartar_cita">
+		<a class="btn btn-primary" href="{% url 'archivar_cita' cita.ID_cita %}">Descartar Cita</a>
+	</div>	<footer>
 
 	</footer>
 </body>

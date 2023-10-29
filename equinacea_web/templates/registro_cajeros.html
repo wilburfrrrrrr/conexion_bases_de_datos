@@ -19,8 +19,13 @@
 <body>
 	<header>
 		<nav class="navbar navbar-expand-lg bg-body-tertiary">
-			<h1>Equinácea Web</h1>
-			<a class="btn btn-primary" href="{% url 'logout_usuario' %}"> <span class="material-symbols-outlined">
+			<div id="logo">
+				<span class="material-symbols-outlined">
+					psychiatry
+				</span>
+				<h1>Equinácea Web</h1>
+			</div>
+			<a href="{% url 'logout_usuario' %}"> <span class="material-symbols-outlined">
 				move_item
 				</span> </a>
 		</nav>		
