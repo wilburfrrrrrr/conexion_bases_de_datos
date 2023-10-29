@@ -14,19 +14,34 @@ body{
   'GRAD' 0,
   'opsz' 24;
   color: #fff !important;
+  font-size: 40px;
+  transition: font-size 0.5s ease-in-out;
 }
 
-.icono_login:hover {
+.material-symbols-outlined:hover {
+  font-size: 45px;
+}
+
+/* .icono_login:hover {
     color: #028351 !important;
   }
 
 .icono_registro:hover {
-    color: #028351 !important;
-}
+    color: #028351 !important; */
+/* } */
 /* .material-symbols-outlined:hover{} */
 
 .navbar {
     background-color: #38BEC7 !important; /* Replace with your desired color */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+#logo {
+    width: 40%;
+    height: auto;
+    display: flex;
 }
 
 /* Change the text color of the navigation bar links */

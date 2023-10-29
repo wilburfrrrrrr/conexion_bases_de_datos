@@ -25,6 +25,9 @@
 	<div class="contenedor">
         <div id="regreso" class="container-sm">
 			<a class="btn btn-primary" href="{% url 'admin' %}">Regresar</a>
+			<a class="btn btn-primary" href="{% url 'logout_usuario' %}"> <span class="material-symbols-outlined">
+				move_item
+				</span> </a>
 		</div>
 		<form method="post">
             {% csrf_token %}
