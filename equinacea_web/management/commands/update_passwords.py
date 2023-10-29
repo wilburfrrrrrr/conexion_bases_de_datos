@@ -6,7 +6,7 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 		usuarios = Usuarios.objects.all()
 		for usuario in usuarios:
-			if not usuario.password.startswith("pbkdf2_sha256$"):
+			if not usuario.password.startswith("$2b$"):
 				usuario.password = hash_password(usuario.password)
 				usuario.save()
 				# print(f"Usuario: {usuario.mail}, password: {usuario.password}")

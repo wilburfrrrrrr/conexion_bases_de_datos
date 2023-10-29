@@ -24,15 +24,17 @@ def login_usuario(request):
 	if request.method == 'POST':
 		form = forms.login_form(request.POST)
 		if form.is_valid():
-			email = form.cleaned_data['mail']
-			password = form.cleaned_data['password']
-			usuario = auth.autenticar(request, mail=email, password=password)
-			if usuario is not None:
-				# login(request, usuario)
-				utils.iniciar_sesion(request, usuario)
-				print(f"{request.session.get('user_id')}")
-				return paneles(request, usuario)
-			else:
+			try:
+				email = form.cleaned_data['mail']
+				password = form.cleaned_data['password']
+				usuario = auth.autenticar(request, mail=email, password=password)
+				if usuario is not None:
+					# login(request, usuario)
+					utils.iniciar_sesion(request, usuario)
+					print(f"{request.session.get('user_id')}")
+					return paneles(request, usuario)
+			except Exception as e:
+				print(e)
 				form.add_error('mail', 'El usuario no existe o la contraseña es incorrecta')
 	else:
 		form = forms.login_form()
@@ -43,12 +45,12 @@ def logout_usuario(request):
 		del request.session['user_id']
 	return redirect('inicio')
 
-# @decorators.cajero_required
+@decorators.cajero_required
 def cajeros(request):
-	# id_sesion = request.session.get('user_id')
-	# cajero = models.Usuarios.objects.get(ID_usuario = id_sesion)
-	cajero_id = 1252686
-	cajero = models.Usuarios.objects.get(ID_usuario = cajero_id)
+	id_sesion = request.session.get('user_id')
+	cajero = models.Usuarios.objects.get(ID_usuario = id_sesion)
+	# cajero_id = 1252686
+	# cajero = models.Usuarios.objects.get(ID_usuario = cajero_id)
 	turnos = models.Turnos.objects.values(
 		'ID_turno',
 		'paciente',
@@ -67,12 +69,12 @@ def cajeros(request):
 	}
 	return render(request, 'cajeros.html', contexto)
 
-# @decorators.doctor_required
+@decorators.doctor_required
 def doctores(request):
-	# user_id = request.session.get('user_id')
-	# doctor_actual = models.Usuarios.objects.get(ID_usuario = user_id)
-	# doctor_id = doctor_actual.ID_usuario
-	doctor_id = 8093211	
+	user_id = request.session.get('user_id')
+	doctor_actual = models.Usuarios.objects.get(ID_usuario = user_id)
+	doctor_id = doctor_actual.ID_usuario
+	# doctor_id = 8093211	
 	doctor = models.Usuarios.objects.get(ID_usuario = doctor_id)
 
 	citas = models.Citas.objects.filter(doctor = doctor_id).values(
@@ -90,12 +92,13 @@ def doctores(request):
 	}
 	return render(request, 'doctores.html', contexto)
 
-# @decorators.paciente_required
+@decorators.paciente_required
 def pacientes(request):
-	fecha_actual = timezone.now()
-	# # paciente = models.Usuarios.objects.get(ID_usuario = request.user.ID_usuario)
-	# paciente_id = paciente.ID_usuario
-	paciente_id = 123516
+	user_id = request.session.get('user_id')
+	# fecha_actual = timezone.now()
+	paciente = models.Usuarios.objects.get(ID_usuario = user_id)
+	paciente_id = paciente.ID_usuario
+	# paciente_id = 123516
 	paciente = models.Usuarios.objects.get(ID_usuario = paciente_id)
 	
 	historial = models.Historial.objects.filter(paciente = paciente.ID_usuario).values(
@@ -121,7 +124,7 @@ def pacientes(request):
 	}
 	return render(request, 'pacientes.html', contexto)
 
-# @decorators.doctor_required
+@decorators.doctor_required
 def cita(request, id_cita):
 	cita = models.Citas.objects.get(ID_cita = id_cita)
 	id_paciente = cita.paciente.ID_paciente.ID_usuario
@@ -164,15 +167,16 @@ def cita(request, id_cita):
 	}
 	return render(request, 'cita.html', contexto)
 
-# @decorators.admin_required
+@decorators.admin_required
 def admin(request):
-	# admin = models.Usuarios.objects.get(ID_usuario = request.user.ID_usuario)
-	# admin_id = admin.ID_usuario
-	admin_id = 9683825
+	user_id = request.session.get('user_id')
+	admin = models.Usuarios.objects.get(ID_usuario = user_id)
+	admin_id = admin.ID_usuario
+	# admin_id = 9683825
 	admin = models.Usuarios.objects.get(ID_usuario = admin_id)
 	return render (request, 'admin.html', {'admin': admin})
 
-# @decorators.admin_required
+@decorators.admin_required
 def admin_cajeros(request):
 	cajeros = models.Usuarios.objects.filter(ID_usuario__in = models.Cajeros.objects.values('ID_cajero')).values(
 		'ID_usuario', 
@@ -182,7 +186,7 @@ def admin_cajeros(request):
 		'telefono')
 	return render(request, 'admin_cajeros.html', {'cajeros': cajeros})
 
-# @decorators.admin_required
+@decorators.admin_required
 def admin_doctores(request):
 	doctores = models.Usuarios.objects.values(
 		'ID_usuario', 
@@ -193,7 +197,7 @@ def admin_doctores(request):
 		'doctores__especialidad__especialidad').filter(doctores__isnull = False)
 	return render(request, 'admin_doctores.html', {'doctores': doctores})
 
-# @decorators.admin_required
+@decorators.admin_required
 def admin_pacientes(request):
 	pacientes = models.Usuarios.objects.values(
 		'ID_usuario',
@@ -207,25 +211,45 @@ def admin_pacientes(request):
 		).filter(pacientes__historial__isnull = False)
 	return render(request, 'admin_pacientes.html', {'pacientes': pacientes})
 
-# @decorators.admin_required
+@decorators.admin_required
 def registro_admin(request):
 	if request.method == 'POST':
 		register_form = forms.registro_usuarios(request.POST)
 		if register_form.is_valid():
-			nuevo_usuario = register_form.save()
-			nuevo_admin = models.Administradores(id_administrador = nuevo_usuario)
+			password = register_form.cleaned_data['password']
+			hashed_password = utils.hash_password(password)
+			nuevo_usuario = models.Usuarios(
+				ID_usuario = register_form.cleaned_data['ID_usuario'],
+				nombre = register_form.cleaned_data['nombre'],
+				apellido = register_form.cleaned_data['apellido'],
+				mail = register_form.cleaned_data['mail'],
+				telefono = register_form.cleaned_data['telefono'],
+				password = hashed_password
+			)
+			nuevo_usuario.save()
+			nuevo_admin = models.Administradores(ID_administrador = nuevo_usuario)
 			nuevo_admin.save()
 			return redirect('admin')
 	else:
 		register_form = forms.registro_usuarios()
 	return render(request, 'registro_admin.html', {'register_form': register_form})
 
-# @decorators.admin_required
+@decorators.admin_required
 def registro_cajeros(request):
 	if request.method == 'POST':
 		register_form = forms.registro_usuarios(request.POST)
 		if register_form.is_valid():
-			nuevo_usuario = register_form.save()
+			password = register_form.cleaned_data['password']
+			hashed_password = utils.hash_password(password)
+			nuevo_usuario = models.Usuarios(
+				ID_usuario = register_form.cleaned_data['ID_usuario'],
+				nombre = register_form.cleaned_data['nombre'],
+				apellido = register_form.cleaned_data['apellido'],
+				mail = register_form.cleaned_data['mail'],
+				telefono = register_form.cleaned_data['telefono'],
+				password = hashed_password
+			)
+			nuevo_usuario.save()
 			nuevo_cajero = models.Cajeros(ID_cajero = nuevo_usuario)
 			nuevo_cajero.save()
 			return redirect('admin')
@@ -234,18 +258,20 @@ def registro_cajeros(request):
 	return render(request, 'registro_cajeros.html', {'register_form': register_form})
 
 
-# @decorators.admin_required
+@decorators.admin_required
 def registro_doctores(request):
 	if request.method == 'POST':
 		register_form = forms.registro_doctores(request.POST)
 		if register_form.is_valid():
+			password = register_form.cleaned_data['password']
+			hashed_password = utils.hash_password(password)
 			nuevo_usuario = models.Usuarios(
 				ID_usuario = register_form.cleaned_data['ID_usuario'],
 				nombre = register_form.cleaned_data['nombre'],
 				apellido = register_form.cleaned_data['apellido'],
 				mail = register_form.cleaned_data['mail'],
 				telefono = register_form.cleaned_data['telefono'],
-				password = register_form.cleaned_data['password']				
+				password = hashed_password
 			)
 			nuevo_usuario.save()
 			nuevo_doctor = models.Doctores(
@@ -258,7 +284,6 @@ def registro_doctores(request):
 		register_form = forms.registro_doctores()
 	return render(request, 'registro_doctores.html', {'register_form': register_form})
 
-# @decorators.admin_required
 def registro_pacientes(request):
 	if request.method == 'POST':
 		register_form = forms.registro_usuarios(request.POST)
@@ -284,7 +309,7 @@ def registro_pacientes(request):
 		register_form = forms.registro_usuarios()
 	return render(request, 'registro_pacientes.html', {'register_form': register_form})
 
-# @decorators.cajero_required
+@decorators.cajero_required
 def registro_citas(request, id_turno):
 	turno = models.Turnos.objects.get(ID_turno = id_turno)
 	paciente = models.Pacientes.objects.get(ID_paciente = turno.paciente)
@@ -309,10 +334,10 @@ def registro_citas(request, id_turno):
 		register_form = forms.registro_citas(especialidad = turno.especialidad)
 	return render(request, 'registro_citas.html', {'register_form': register_form})
 
-# @decorators.paciente_required
+@decorators.paciente_required
 def registro_turnos(request):
-	# paciente_id = request.session.get('user_id')
-	paciente_id = 123516
+	paciente_id = request.session.get('user_id')
+	# paciente_id = 123516
 	if request.method == 'POST':
 		register_form = forms.registro_turnos(request.POST)
 		if register_form.is_valid():
@@ -330,32 +355,32 @@ def registro_turnos(request):
 		register_form = forms.registro_turnos()
 	return render(request, 'registro_turnos.html', {'register_form': register_form})
 
-# @decorators.admin_required
+@decorators.admin_required
 def cajeros_archivados(request):
 	cajeros_eliminados = models.CajerosEliminados.objects.all()
 	return render(request, 'cajeros_archivados.html', {'cajeros_eliminados': cajeros_eliminados})
 
-# @decorators.admin_required
+@decorators.admin_required
 def doctores_archivados(request):
 	doctores_eliminados = models.DoctoresEliminados.objects.all()
 	return render(request, 'doctores_archivados.html', {'doctores_eliminados': doctores_eliminados})
 
-# @decorators.admin_required
+@decorators.admin_required
 def pacientes_archivados(request):
 	pacientes_eliminados = models.PacientesEliminados.objects.all()
 	return render(request, 'pacientes_archivados.html', {'pacientes_eliminados': pacientes_eliminados})
 
-# @decorators.admin_required
+@decorators.admin_required
 def citas_archivadas(request):
 	citas_eliminadas = models.CitasEliminados.objects.all()
 	return render(request, 'citas_archivadas.html', {'citas_eliminadas': citas_eliminadas})
 
-# @decorators.admin_required
+@decorators.admin_required
 def turnos_archivados(request):
 	turnos_eliminados = models.TurnosEliminados.objects.all()
 	return render(request, 'turnos_archivados.html', {'turnos_eliminados': turnos_eliminados})	
 
-# @decorators.admin_required
+@decorators.admin_required
 def eliminar_usuario(request, id_usuario):
 	usuario = models.Usuarios.objects.get(ID_usuario = id_usuario)
 	usuario_archivado = models.UsuariosEliminados(
@@ -370,11 +395,11 @@ def eliminar_usuario(request, id_usuario):
 	usuario_archivado.save()
 	usuario.delete()
 
-# @decorators.admin_required
+@decorators.admin_required
 def archivar_cajero(request, id_cajero):
 	cajero = models.Usuarios.objects.get(ID_usuario = id_cajero)
 	cajero_archivado = models.CajerosEliminados(
-		ID_cajero = cajero.ID_usuario,
+		ID_usuario = cajero.ID_usuario,
 		nombre = cajero.nombre,
 		apellido = cajero.apellido,
 		mail = cajero.mail,
@@ -385,23 +410,23 @@ def archivar_cajero(request, id_cajero):
 	eliminar_usuario(request, id_cajero)
 	return redirect('admin_cajeros')
 
-# @decorators.admin_required
+@decorators.admin_required
 def archivar_doctor(request, id_doctor):
 	doctor = models.Usuarios.objects.get(ID_usuario = id_doctor)
 	doctor_archivado = models.DoctoresEliminados(
-		ID_doctor = doctor.ID_usuario,
+		ID_usuario = doctor.ID_usuario,
 		nombre = doctor.nombre,
 		apellido = doctor.apellido,
 		mail = doctor.mail,
 		telefono = doctor.telefono,
-		especialidad = doctor.doctores.especialidad,
+		especialidad = doctor.doctores.especialidad.especialidad,
 		fecha_eliminado = timezone.now()
 		)
 	doctor_archivado.save()
 	eliminar_usuario(request, id_doctor)
 	return redirect('admin_doctores')
 
-# @decorators.admin_required
+@decorators.admin_required
 def archivar_paciente(request, id_paciente):
 	paciente = models.Usuarios.objects.get(ID_usuario = id_paciente)
 	paciente_archivado = models.PacientesEliminados(
@@ -419,7 +444,7 @@ def archivar_paciente(request, id_paciente):
 	eliminar_usuario(request, id_paciente)
 	return redirect('admin')
 
-# @decorators.admin_required
+@decorators.admin_required
 def archivar_cita(request, id_cita):
 	cita = models.Citas.objects.get(ID_cita = id_cita)
 	cita_archivada = models.CitasEliminados(
@@ -438,7 +463,7 @@ def archivar_cita(request, id_cita):
 	cita.delete()
 	return redirect('doctores')
 
-# @decorators.admin_required
+@decorators.cajero_required
 def archivar_turno(request, id_turno):
 	turno = models.Turnos.objects.get(ID_turno = id_turno)
 	print(f"turno: {turno.ID_turno}")
@@ -459,7 +484,7 @@ def archivar_turno(request, id_turno):
 	turno.delete()
 	return redirect('cajeros')
 
-# @decorators.admin_required
+@decorators.admin_required
 def actualizar_disponibilidad(request, id_doctor):
 	doctor = models.Doctores.objects.get(ID_doctor = id_doctor)
 	if doctor.disponibilidad:
