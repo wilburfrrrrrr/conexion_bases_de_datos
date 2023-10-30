@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-# from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -78,11 +77,6 @@ WSGI_APPLICATION = 'equinacea_web.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': config('db_name'),
-		# 'USER': config('db_user'),
-		# 'PASSWORD': config('db_password'),
-		# 'HOST': config('db_host'),
-		# 'PORT': config('db_port'),
 		'NAME': 'hospital',
 		'USER': 'kevin',
 		'PASSWORD': '123456789',
